@@ -36,6 +36,9 @@
 
     $(document).ready(function(){
     $(document).bind("keydown", function(e){ 
+        if (e.target.nodeName.toLowerCase()=='input'){
+            return;
+        }
         e = e || window.event;
         var charCode = e.which || e.keyCode;
         if(charCode == 68) eel.py_demo_mode_toggle();
@@ -374,6 +377,8 @@
 
     function make_selection(side,index){
        // console.log("MAKIGN SLEECTION ON IDNEX: "+index);
+       console.log("MAKE_SELECTION - SIDE: ",side);
+       console.log("SELECTIO NSIDE BEFORE: ",selection_side);
         selection_side=side;
         eel.py_make_selection(selection_side,index);
 
@@ -442,14 +447,17 @@
     }
 
     function save_current(){
+        console.log("SAVE CURRENT with SELECTIO NSIDE ",selection_side);
+
         eel.py_save_current(selection_side,current_id);
     }
     function unsave_current(){
+        console.log("UNSAVE CURRENT with SELECTIO NSIDE ",selection_side);
         eel.py_unsave_current(selection_side,current_id);
     }
     function transfer_current(){
-        eel.py_transfer_current(transfer_from,current_id,unsave_after_transfer_flag);
-        console.log("transfer: "+ current_id + "Side: " + transfer_from);
+        eel.py_transfer_current(last_side,current_id,unsave_after_transfer_flag);
+        //console.log("transfer: "+ current_id + "Side: " + transfer_from);
         if (last_side==0){
             dupe = document.querySelector('#leftfeed > #post_'+last_index);
             console.log(last_index + ","+ last_side);
@@ -611,16 +619,16 @@
     function js_display_selection(card,index,side){
         last_index=index;
         last_side=side;
-        console.log("CLICKED INDEX: " + last_index);
-        console.log(card.dataset.full);
-        console.log(card);
+        console.log("CLICK SIDE: ",side);
         let details = JSON.parse(card.dataset.full);
         console.log(details);
-        eel.py_make_selection(side,index);
+        //eel.py_make_selection(side,index);
+        make_selection(side,index);
         document.getElementById('middle-thumbnail').src=details[0];
+        //console.log(details[0]);
         document.getElementById('middle-title').innerText=details[1];
         document.getElementById('middle-subreddit').innerText=details[2];
-        document.getElementById('middle-hotlink').href='https://www.reddit.com/'+details[5];
+        document.getElementById('middle-hotlink').href='https://www.reddit.com'+details[5];
         current_id = details[4];
 
     }
@@ -713,6 +721,7 @@
         }
     }
     function request_sub(side){
+        select_sub(side);
         if (selected_sub==''){
             console.log("SELECT A SUBREDDIT");
             return;
@@ -842,6 +851,12 @@
 
     eel.expose(js_create_card);
     function js_create_card(side,data,index){
+        console.log(data);
+
+        if (!data[0].includes('.com')){
+            data[0]='thumbs/text_post.jpg';
+        }
+
         if (side ==0){
             left_displayed_count+=1;
             $('<div/>',{
@@ -856,6 +871,7 @@
                         }).append($('<img/>',{
                             class:'post-image',
                             src:data[0]
+                            //src:data[0]
                         }))
                 ).append($('<div/>',{
                     class:'post-details',
@@ -1074,7 +1090,7 @@ html, body, h1, h2, h3, h4, h5 {font-family:Georgia, 'Times New Roman', Times, s
     grid-row-end: 3;
     overflow-y:hidden;
     position: relative;
-    filter:blur(20px);
+    filter:blur(0px);
     z-index: 3;
 }
 

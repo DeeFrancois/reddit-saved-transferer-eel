@@ -76,9 +76,10 @@ def list_filterer(the_list):
     deleted_list = []
     for i in the_list:
         current_filter = i.subreddit.display_name
+        
         if isinstance(i,praw.models.Comment):
             continue
-        
+        #print(i.thumbnail)
         #if text_post_flag.get()==0:
         if i.is_self:
             current_filter+=" textpost"
@@ -100,9 +101,9 @@ def list_filterer(the_list):
             deleted_list.append('https://www.reddit.com'+i.permalink)
             continue
 
-        if i.thumbnail == 'image':
+        #if i.thumbnail == 'image' or i.thumbnail=='self':
             #print("Posts from this sub don't have thumbnails.. idk what to do here bruh")
-            continue
+        #    continue
         
         
 
@@ -144,7 +145,7 @@ def py_pullsaves(side):
     if side == 1: #right side
         print("Initiated saved list retrieval for: ",username_b)
         user_object_b = r2.user.me()
-        right_list=list(user_object_b.saved(limit=200))
+        right_list=list(user_object_b.saved(limit=100))
         right_list=list_filterer(right_list)
        # print("Finished Pull")
         display_loop(1)
@@ -152,7 +153,7 @@ def py_pullsaves(side):
     else:
         print("Initiated saved list retrieval for: ",username)
         user_object = r.user.me()
-        left_list=list(user_object.saved(limit=200))
+        left_list=list(user_object.saved(limit=100))
         left_list=list_filterer(left_list)
        # print("Finished Pull")
         display_loop(0)
@@ -167,11 +168,11 @@ def py_pullsub(side,sub,top_hot_new):
         print("Initiated subreddit retrieval for: r/",sub)
 
         if (top_hot_new==0):
-            right_list=list(r2.subreddit(sub).top(limit=500))
+            right_list=list(r2.subreddit(sub).top(limit=100))
         elif (top_hot_new==1):
-            right_list=list(r2.subreddit(sub).hot(limit=500))
+            right_list=list(r2.subreddit(sub).hot(limit=100))
         elif (top_hot_new==2):
-            right_list=list(r2.subreddit(sub).new(limit=500))
+            right_list=list(r2.subreddit(sub).new(limit=100))
 
         right_list=list_filterer(right_list)
        # print("Finished Pull")
@@ -180,11 +181,11 @@ def py_pullsub(side,sub,top_hot_new):
     else:
         print("Initiated subreddit retrieval for: r/",sub)
         if (top_hot_new==0):
-            left_list=list(r.subreddit(sub).top(limit=500))
+            left_list=list(r.subreddit(sub).top(limit=100))
         elif (top_hot_new==1):
-            left_list=list(r.subreddit(sub).hot(limit=500))
+            left_list=list(r.subreddit(sub).hot(limit=100))
         elif (top_hot_new==2):
-            left_list=list(r.subreddit(sub).new(limit=500))
+            left_list=list(r.subreddit(sub).new(limit=100))
 
         left_list=list_filterer(left_list)
        # print("Finished Pull")
@@ -214,6 +215,7 @@ def pull_link(data):
 
 @eel.expose
 def py_make_selection(side,index):
+    print("MAKE SELECTION: ",side)
     if side == 0:
        # print(left_list[index].id)
         #data = [left_list[index].thumbnail,left_list[index].title[:35],left_list[index].subreddit.display_name,left_list[index].permalink,left_list[index].id]
@@ -231,33 +233,35 @@ def py_make_selection(side,index):
 @eel.expose
 def py_unsave_current(side,curr_id): #side for profile
     if side == 0:
-        print("Unsaving post: ",)
+        print("Unsaving post from LEFT side")
         if demo_mode_flag == 0:
-            print("Hm")
-            #r.submission(curr_id).unsave()
+            #print("Hm")
+            r.submission(curr_id).unsave()
         else:
             print("Simulating Unsave")
     else:
+        print("Unsaving post from RIGHT side")
         if demo_mode_flag == 0:
-            print("Hm")
-            #r2.submission(curr_id).unsave()
+            #print("Hm")
+            r2.submission(curr_id).unsave()
         else:
             print("Simulating Unsave")
     
 @eel.expose
 def py_save_current(side,curr_id): #side for profile
     if side == 0:
-
+        print("Saving post on LEFT side")
         if demo_mode_flag == 0:
-            print("Hm")
-            #r.submission(curr_id).save()
+            #print("Hm")
+            r.submission(curr_id).save()
         else:
             print("Simulating Save")
 
     else:
+        print("Saving post on RIGHT side")
         if demo_mode_flag == 0:
-            print("Hm")
-            #r2.submission(curr_id).save()
+            #print("Hm")
+            r2.submission(curr_id).save()
         else:
             print("Simulating Unsave")
 
@@ -266,28 +270,41 @@ def py_transfer_current(from_side,curr_id,unsave_flag):
         if from_side == 0: #Left
             transfer_from = r
             transfer_to = r2
+
+            placeholder_from = "User A"
+            placeholder_to = "User B"
             
         else:
             transfer_from = r2
             transfer_to = r
 
+            placeholder_from = "User B"
+            placeholder_to = "User A"
+
         to_save=transfer_to.submission(curr_id)
         to_unsave = transfer_from.submission(curr_id)
         
-        print(f"Transferred Post: {to_save.title} To {transfer_to.user.me().name}'s Saved List")
-        print(f"Removed Post: {to_save.title} from {transfer_from.user.me().name}'s Saved List")
+        if (demo_mode_flag):
+            user_from = placeholder_from
+            user_to = placeholder_to
+        else:
+            user_from= transfer_from.user.me().name
+            user_to = transfer_to.user.me().name
+
+        print(f"Transferred Post: {to_save.title} To {user_to}'s Saved List")
+        print(f"Removed Post: {to_save.title} from {user_from}'s Saved List")
         #to_save.save()
         if demo_mode_flag==0:
-            print("Hm")
-            #to_save.save()
+            #print("Hm")
+            to_save.save()
         else:
             print("Simulating Save")
 
         if unsave_flag:
 
             if demo_mode_flag==0:
-                #to_unsave.unsave()
-                print("Hm")
+                to_unsave.unsave()
+                #print("Hm")
                 #print("unsaved")
             else:
                 print("Simulating Unsave")

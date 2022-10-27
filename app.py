@@ -153,7 +153,7 @@ def py_pullsaves(side):
     else:
         print("Initiated saved list retrieval for: ",username)
         user_object = r.user.me()
-        left_list=list(user_object.saved(limit=100))
+        left_list=list(user_object.saved(limit=500))
         left_list=list_filterer(left_list)
        # print("Finished Pull")
         display_loop(0)

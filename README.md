@@ -17,7 +17,7 @@ While working on this I noticed reddit doesn't have much functionality for sorti
 
 ## Main Python Libraries:
 - Python-Eel 
-- Praw 
+- Praw (Python Reddit API Wrapper)
 
 requirements.txt file included so you use the following command to install the rest:
 

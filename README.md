@@ -2,7 +2,7 @@
 
 A program built for browsing your reddit saves and transferring them to another account (or subreddit).
 
-![demo](https://github.com/DeeFrancois/FileTagger_ElectronVersion/blob/main/DocumentationImages/demo.png)
+![demo](https://github.com/DeeFrancois/RedditSavedExplorer_EEL_Version/blob/main/DocumentationImages/demo.png)
 
 Also allows you to browse subreddits, filter your saves by subreddit, preview the media, and unsave/save posts.
 

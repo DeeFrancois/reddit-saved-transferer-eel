@@ -13,7 +13,7 @@ While working on this I noticed reddit doesn't have much functionality for sorti
 
 ## Usage
 
-![demo](https://github.com/DeeFrancois/FileTagger_ElectronVersion/blob/main/DocumentationImages/demo.gif)
+![demo](https://github.com/DeeFrancois/RedditSavedExplorer_EEL_Version/blob/main/DocumentationImages/demo.gif)
 
 ## Main Python Libraries:
 - Python-Eel 

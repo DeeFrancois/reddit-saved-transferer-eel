@@ -32,6 +32,4 @@ requirements.txt file included so you use the following command to install the r
 - Filter/sorting options
 - Extract saved posts that have been deleted
 
-## Current Issues
-
 Licensed under the [MIT License](LICENSE).

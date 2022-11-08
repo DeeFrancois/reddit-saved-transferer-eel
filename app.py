@@ -11,6 +11,7 @@ import os
 import json
 import youtube_dl
 import time
+import subprocess
 
 eel.init('web')
 eel.start('main.html',block=False,size=(1008,715))
@@ -74,10 +75,12 @@ def list_filterer(the_list):
     global deleted_list
     filtered_list = []
     deleted_list = []
+    comment_count = 0
     for i in the_list:
         current_filter = i.subreddit.display_name
         
         if isinstance(i,praw.models.Comment):
+            comment_count+=1
             continue
         #print(i.thumbnail)
         #if text_post_flag.get()==0:
@@ -115,6 +118,7 @@ def list_filterer(the_list):
         #    continue
         i.filters=current_filter
         filtered_list.append(i)
+    print(comment_count)
     extract_save_file()
     return filtered_list
 
@@ -129,7 +133,7 @@ def display_loop(side):
                continue
             
     else:
-        for i in range(0,500):
+        for i in range(0,1000):
             try:
                 data = [left_list[i].thumbnail,left_list[i].title[:33].replace('"',"'"),'/r/'+left_list[i].subreddit.display_name,'/u/'+left_list[i].author.name,left_list[i].filters,left_list[i].id,left_list[i].permalink]
                 eel.js_create_card(0,data,i)
@@ -153,9 +157,9 @@ def py_pullsaves(side):
     else:
         print("Initiated saved list retrieval for: ",username)
         user_object = r.user.me()
-        left_list=list(user_object.saved(limit=500))
+        left_list=list(user_object.saved(limit=20))
+        print("Finished Pull",len(left_list))
         left_list=list_filterer(left_list)
-       # print("Finished Pull")
         display_loop(0)
         eel.js_saves_recieved(0)
    # print("Out Pull saves")
@@ -194,8 +198,10 @@ def py_pullsub(side,sub,top_hot_new):
 
 
 def pull_link(data):
+    global last_link
     player_select = 2
     output_link=data.url
+    last_link=[output_link,data.author.name,data.id]
     if '.png' in data.url or '.jpg' in data.url or '.jpeg' in data.url:
         player_select=2
     elif 'gfycat.com' in data.url:
@@ -265,6 +271,10 @@ def py_save_current(side,curr_id): #side for profile
         else:
             print("Simulating Unsave")
 
+@eel.expose
+def py_download_current():
+    print("Downloading: ",last_link)
+    subprocess.run(["yt-dlp"," {}".format(last_link[0]),"--no-mtime","-o","downloads/{}_{}.%(ext)s".format(last_link[1],last_link[2])])
 @eel.expose
 def py_transfer_current(from_side,curr_id,unsave_flag):
         if from_side == 0: #Left
@@ -358,6 +368,8 @@ def py_login(left_right,data):
     global client_id_b
     global r
     global r2
+    global last_link
+    last_link=''
     if left_right == 0:
 
         username=data[0]

@@ -447,6 +447,11 @@ var left_displayed_count = 0;
         console.log("UNSAVE CURRENT with SELECTIO NSIDE ",selection_side);
         eel.py_unsave_current(selection_side,current_id);
     }
+
+    function download_current(){
+
+        eel.py_download_current();
+    }
     function transfer_current(){
         eel.py_transfer_current(last_side,current_id,unsave_after_transfer_flag);
         //console.log("transfer: "+ current_id + "Side: " + transfer_from);

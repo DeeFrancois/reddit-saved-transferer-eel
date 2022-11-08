@@ -16,8 +16,8 @@ While working on this I noticed reddit doesn't have much functionality for sorti
 ![demo](https://github.com/DeeFrancois/RedditSavedExplorer_EEL_Version/blob/main/DocumentationImages/demo.gif)
 
 ## Main Python Libraries:
-- Python-Eel 
-- Praw (Python Reddit API Wrapper)
+- [Python-Eel](https://github.com/python-eel/Eel)
+- [Praw](https://praw.readthedocs.io/en/stable/getting_started/quick_start.html) (Python Reddit API Wrapper)
 
 requirements.txt file included so you use the following command to install the rest:
 

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<title>Reddit Saved Transferer - github.com/deefrancois</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="/eel.js"></script>
+<script src="/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="/main.js"></script>
+<link rel='stylesheet' type="text/css" href='original.css'>
+<body style="background-color: #444444;width:981px">
+<!-- The Grid -->
+<div class="grid-container"id="gridcontainer">
+    <!-- Left Column -->
+    <div class="left-grid-item">
+      <!-- Profile -->
+        
+        <div class="profile-container" style="font-size: 12px;">
+            <h4 class="profile-label" id="login_user" style="padding-left:5px;float:left;margin-top: 0px;">Logged in: My Profile</h4>
+            <p class="profile-picture"><img src="thumbs/user_icon.jpg" class="profile-pic" style="position:absolute;right:50px;height:70px;width:70px;" alt="Avatar"></p>
+            <button type="button" id="pull_button" style="position:absolute;left:10%;top:30%;width:100px" onclick="request_saves(0)">Pull Saves</button>
+            <div class='feed-label-container' id="feed-label-container" style="position:absolute; bottom:2px; padding-left: 4px;text-align:left;padding-bottom:2px;font-size:10px;">
+                <div id='feed-label' style="display: inline-block;"></div>
+                <div id='post-count-label' style="display: inline-block;"></div>
+            </div>
+
+        </div>
+    
+    <!-- End Left Column -->
+    </div>
+
+    <!-- Left Column -->
+    
+    <div class="left-grid-item left-feed" id="leftfeed">
+        <div class = "login-page" id="left-login-page">
+            <div style="padding-top: 5px;">
+                Login
+            </div>
+            
+            <div class="credentials_container" id="left-credentials" style="text-align: center; padding-top: 10px;">
+                <div class="credentials_contents" style="display:inline-block;text-align: right;">
+                <label for="username_label">Username</label>
+                <input type="password" class="credentials-bar" id="username_label">
+                <br>
+                
+                <label for="password_label">Password</label>
+                <input type="password"  class="credentials-bar" id="password_label">
+                <br>
+                
+                <label for="client_id_label">Client ID</label>
+                <input type="password"  class="credentials-bar"id="client_id_label">
+                <br>
+                
+                <label for="client_secret_label">Client Secret</label>
+                <input type="password" class="credentials-bar" id="client_secret_label">
+                <br>
+                
+                <label for="user_agent_label">User Agent</label>
+                <input type="password"  class="credentials-bar" id="user_agent_label">
+                </div>
+                 
+            </div>
+            <div style="padding-top: 10px;">
+                
+                <button onclick="cycle_logins(0)">Cycle Logins</button>
+                <button id="left-login-button" onclick="login(0)">Login</button>
+                <button id="left-login-button" onclick="refresh_login_file()">Refresh Login File</button>
+                
+            </div>
+        </div>
+        
+        <!--<div class="post-container">
+            <div class="post-thumbnail" style="float:left;">
+                <img src="thumbs/left_saved.jpg" class="post-image">
+            </div>
+            <div class="post-details">
+                <p>TOP digital painting</p>
+                <p>DigitalPainting</p>
+                <p>/r/DigitalPaiting/...</p>
+            </div>
+        </div>
+    -->
+
+
+            <!-- End Left Column -->
+    </div>
+
+      <!-- Left Column -->
+    <div class="left-grid-item left-bottom">
+        <div class="bottombarcontainer" style="padding-top: 10px;padding-bottom: 10px;">
+        <input type="text" id="left_sub_bar" onKeyUp="left_bar_handler()" style="left:3%;width:140px;height:12px;color:white;background-color:#1d1d1d;"></button>
+        <button type="button" id="pullsub_button" style="left:58%;width:100px;" onclick="request_sub(0)">Pull Subreddit</button>
+        <button type="button" id="selectsub_button" style="display:none;left:58%;width:125px;" onclick="select_sub(1)">Select Subreddit</button>
+        </div>
+        <!-- Profile -->
+        <div class="left-checkbox-container" style="font-size: 14px;">
+            <div>
+                <input checked type="checkbox" id="sfwCheck" onclick="filter_checkbox_handler(0,this,'safefw')">
+                <label for="sfwCheck">SFW Posts</label>
+            </div>
+            <div>
+                <input type="checkbox" id="reverseCheck" onclick="reverseList(0)">
+                <label for="reverseCheck">Reverse List</label>
+            </div>
+            <div>
+                <input type="checkbox" id="topCheck" checked onclick="sub_check_handler(0,0)">
+                <label for="topCheck">Top(Subreddit)</label>
+            </div>
+            <div>
+                <input type="checkbox" id="nsfwCheck" onclick="filter_checkbox_handler(0,this,'nsfw')">
+                <label for="nsfwCheck">NSFW Posts</label>
+            </div>
+            <div>
+                <input checked type="checkbox" id="thumbnailsCheck">
+                <label for="thumbnailsCheck">Thumbnails</label>
+            </div>
+            <div>
+                <input type="checkbox" id="hotCheck" onclick="sub_check_handler(0,1)">
+                <label for="hotCheck">Hot(Subreddit)</label>
+            </div>
+            <div>
+                <input type="checkbox" id="textCheck" onclick="filter_checkbox_handler(0,this,'textpost')">
+                <label for="textCheck">Text Posts</label>
+            </div>
+            <div>
+                <input type="checkbox" id="specificCheck" onclick="filter_checkbox_handler(0,this,document.getElementById('left_sub_bar').value)">
+                <label for="specificCheck">Sub Filter</label>
+            </div>
+            <div>
+                <input type="checkbox" id="newCheck" style="background:#1d1d1d;" onclick="sub_check_handler(0,2)">
+                <label for="newCheck">New (Subreddit)</label>
+            </div>
+            
+        </div>
+        <br>
+
+    <!-- End Left Column -->
+    </div>
+
+    <div class="mid-grid-item"onwheel="mousewheelHandler(event)">
+        <!-- Profile -->
+          <div class="idk" >
+              <div class="profile-container" style="font-size: 18px;">
+                  <h4 class="profile-label">Transfer Direction</h4>
+                  <p class="transfer-direction"><img src="thumbs/right_arrow.png" id="transfer_img" class="profile-pic" style="height:50px;width:50px;" alt="Avatar" onclick="toggle_transfer_direction()"></p>
+                  
+                <div class="control-center" style="padding-top: 10px;font-size: 14px;">
+                    <div>
+                        <input type="checkbox" id="videoCheck" checked onclick="toggle_video()">
+                        <label for="videoCheck">Video Player</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" checked id="unsaveCheck" onclick="toggle_unsave_after_transfer()">
+                        <label for="unsaveCheck">Unsave After Transfer</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="transferCheck" onclick="toggle_submode()">
+                        <label for="transferCheck">Transfer To Subreddit</label>
+                    </div>
+                </div>
+                <br>
+                <div class="post-container unstyled" style="padding-left: 10px;">
+                    <div class="post-thumbnail middle" style="float:left;">
+                        <img id="middle-thumbnail" src="thumbs/left_saved.jpg" class="post-image">
+                    </div>
+                    <div class="post-details middle">
+                        <p id="middle-title">Placeholder Post Title</p>
+                        <p id="middle-subreddit">/r/Subreddit</p>
+                        <a id="middle-hotlink" href="https://www.google.com" target="_blank" style="color: white;">Open in Browser</a>
+                    </div>
+                </div>
+                <div class="video-player" id="videoplayerdiv" style="padding-top: 10px;">
+                    <iframe class="player mid-iframe" id="mid-iframe" src="" scrolling="no" frameborder="0" style="display:none;height:150px;width:300px" onwheel="mousewheelHandler(event)">
+                    </iframe>
+                    <video class="player mid-video" id="mid-video" style="display:none;height:150px;width:300px" controls autoplay muted loop src="">
+                    </video>
+                    <img class="player mid-image" id="mid-image" style="display:none;max-height:150px;max-width:300px" src="">
+                </div>
+                <br>
+                <div class="mid-bottom-controls">
+                    <button id="unsave-button" onclick="unsave_current()">Unsave</button>
+                    <!-- <button id="transfer-button" onclick="transfer_current()">Transfer</button> -->
+                    <button id="transfer-button" onclick="download_current()">Download</button>
+                    <button id="save-button" onclick="save_current()">Save</button>
+                    
+                    <button id="post-button" onclick="post_current()" style="display:none;">Post</button>
+                    <button id="posting-as-button" onclick="toggle_posting_as()"style="display:none;width:135px;">Posting as: LEFT</button>
+                    <button id="submode-button" onclick="save_current()"style="display:none;">Save</button>
+                    <br>
+                    <br>
+                    <button id="automation-button" style="width:170px;height: 34px;font-size: 21px;" onclick="automation(0)">Start Transfers</button>
+                </div>
+        
+                  
+              </div>
+          </div>
+          <br>
+      
+      <!-- End Left Column -->
+    </div>
+
+    <!-- right Column -->
+    <div class="right-grid-item">
+        <!-- Profile -->
+          
+        <div class="profile-container" style="font-size: 12px;">
+            <h4 class="profile-label" id="login_user_two" style="padding-left:5px;float:left;margin-top: 0px;">Logged in: My Profile</h4>
+            <p class="profile-picture"><img src="thumbs/user_icon.jpg" class="profile-pic" style="position:absolute;right:50px;height:70px;width:70px;" alt="Avatar"></p>
+            <button type="button" id="pull_button_two" style="position:absolute;left:10%;top:30%;width:100px;" onclick="request_saves(1)">Pull Saves</button>
+            <div class='right-feed-label-container' id="right-feed-label-container" style="position:absolute; bottom:2px; padding-left: 4px;text-align:left;padding-bottom:2px;font-size:10px;">
+                <div id='right-feed-label' style="display: inline-block;"></div>
+                <div id='right-post-count-label' style="display: inline-block;"></div>
+            </div>
+        </div>
+      
+      <!-- End right Column -->
+      </div>
+  
+      <!-- right Column -->
+      
+      <div class="right-grid-item right-feed" id="rightfeed">
+
+        <div class = "login-page" id="right-login-page">
+            <div style="padding-top: 5px;">
+                Login
+            </div>
+            
+            <div class="credentials_container" id="right-credentials" style="text-align: center; padding-top: 10px;">
+                <div class="credentials_contents" style="display:inline-block;text-align: right;">
+                <label for="right_username_label">Username</label>
+                <input type="password" class="credentials-bar" id="right_username_label">
+                <br>
+                
+                <label for="right_password_label">Password</label>
+                <input type="password"  class="credentials-bar" id="right_password_label">
+                <br>
+                
+                <label for="right_client_id_label">Client ID</label>
+                <input type="password"  class="credentials-bar"id="right_client_id_label">
+                <br>
+                
+                <label for="right_client_secret_label">Client Secret</label>
+                <input type="password" class="credentials-bar" id="right_client_secret_label">
+                <br>
+                
+                <label for="right_user_agent_label">User Agent</label>
+                <input type="password"  class="credentials-bar" id="right_user_agent_label">
+                </div>
+                 
+            </div>
+            <div style="padding-top: 10px;">
+                <button onclick="cycle_logins(1)">Cycle Logins</button>
+                <button id="right-login-button" onclick="login(1)">Login</button>
+                <button id="left-login-button" onclick="refresh_login_file()">Refresh Login File</button>
+
+            </div>
+        </div>
+        <!--  
+        <div class="post-container">
+              <div class="post-thumbnail" style="float:left;">
+                  <img src="thumbs/right_saved.jpg" class="post-image">
+              </div>
+              <div class="post-details">
+                  <p>Cool digital painting</p>
+                  <p>DigitalPainting</p>
+                  <p>/r/DigitalPaiting/...</p>
+              </div>
+          </div>
+        -->
+  
+              <!-- End right Column -->
+      </div>
+  
+        <!-- right Column -->
+      <div class="right-grid-item right-bottom">
+        <div class="bottombarcontainer" style="padding-top: 10px;padding-bottom: 10px;">
+        <input id="right_sub_bar" type="text" style="left:3%;width:140px;height:12px;color:white;background-color:#1d1d1d;"></button>
+        <button type="button" id="right_pullsub_button" style="left:58%;width:100px;" onclick="request_sub(1)">Pull Subreddit</button>
+        <button type="button" id="right_selectsub_button" style="display:none;left:58%;width:125px;" onclick="select_sub(1)">Select Subreddit</button>
+        </div>
+          <!-- Profile -->
+          <div class="right-checkbox-container" style="font-size: 14px;">
+              <div>
+                  <input checked type="checkbox" id="right_sfwCheck" onclick="filter_checkbox_handler(1,this,'safefw')">
+                  <label for="right_sfwCheck">SFW Posts</label>
+              </div>
+              <div>
+                  <input type="checkbox" id="right_reverseCheck" onclick="reverseList(1)">
+                  <label for="right_reverseCheck">Reverse List</label>
+              </div>
+              <div>
+                  <input type="checkbox" id="right_topCheck" checked onclick="sub_check_handler(1,0)">
+                  <label for="right_topCheck">Top(Subreddit)</label>
+              </div>
+              <div>
+                  <input type="checkbox" id="right_nsfwCheck" onclick="filter_checkbox_handler(1,this,'nsfw')">
+                  <label for="right_nsfwCheck">NSFW Posts</label>
+              </div>
+              <div>
+                  <input checked type="checkbox" id="right_thumbnailsCheck">
+                  <label for="right_thumbnailsCheck">Thumbnails</label>
+              </div>
+              <div>
+                  <input type="checkbox" id="right_hotCheck" onclick="sub_check_handler(1,1)">
+                  <label for="right_hotCheck">Hot(Subreddit)</label>
+              </div>
+              <div>
+                  <input type="checkbox" id="right_textCheck" onclick="filter_checkbox_handler(1,this,'textpost')">
+                  <label for="right_textCheck">Text Posts</label>
+              </div>
+              <div>
+                  <input type="checkbox" id="right_specificCheck" onclick="filter_checkbox_handler(1,this,document.getElementById('right_sub_bar').value)">
+                  <label for="right_specificCheck">Sub Filter</label>
+              </div>
+              <div>
+                  <input type="checkbox" id="right_newCheck" style="background:#1d1d1d;" onclick="sub_check_handler(1,2)">
+                  <label for="right_newCheck">New (Subreddit)</label>
+              </div>  
+              
+              
+          </div>
+          <br>
+        
+        <!-- End Left Column -->
+      </div>
+
+</div>
+
+
+</body>    
+</html> 

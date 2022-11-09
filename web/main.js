@@ -12,7 +12,7 @@ var left_displayed_count = 0;
     var curr_scale = 2;
     var transfer_from = 0;
     var unsave_after_transfer_flag = 1;
-    var size = [1008,715];  //public variable
+    var size = [1408,715];  //public variable
     var submode=0;
     var posting_as = 0;
     var selected_sub="";
@@ -22,9 +22,9 @@ var left_displayed_count = 0;
     var automation_kill_switch=0;
     var last_index = 0;
     var last_side = 0;
-    $(window).resize(function(){
-    window.resizeTo(size[0],size[1]);
-    });
+    // $(window).resize(function(){
+    // window.resizeTo(size[0],size[1]);
+    // });
 
     $(document).ready(function(){
     $(document).bind("keydown", function(e){ 
@@ -380,18 +380,18 @@ var left_displayed_count = 0;
         var current_player_element=document.getElementById(curr_player);
         zoomed=0;
         curr_scale=1;
-        current_player_element.className=curr_player;
-        current_player_element.style.transform='scale(1,1)';
-        if (curr_player=="mid-image"){
-            current_player_element.style.maxHeight='150px';
-            current_player_element.style.maxWidth='300px';
-            current_player_element.style.height='none';
-            current_player_element.style.width='none';
-        }
-        else{
-            current_player_element.style.height='none';
-            current_player_element.style.width='none';
-        }
+        // current_player_element.className=curr_player;
+        // current_player_element.style.transform='scale(1,1)';
+        // if (curr_player=="mid-image"){
+        //     current_player_element.style.maxHeight='100%';
+        //     current_player_element.style.maxWidth='100%';
+        //     current_player_element.style.height='none';
+        //     current_player_element.style.width='none';
+        // }
+        // else{
+        //     current_player_element.style.height='none';
+        //     current_player_element.style.width='none';
+        // }
         
                 
        // console.log(current_link);
@@ -639,7 +639,7 @@ var left_displayed_count = 0;
             //UNBLUR
             $('#left-login-page').hide();
            // console.log("Unblurring");
-            var els = document.querySelectorAll(`[class*='left-grid-item'],[class*='mid-grid-item']`);
+            var els = document.querySelector('#leftfeed').children;
            // console.log(els);
             for (var i=0; i<els.length; i++) {
                 els[i].style.filter='blur(0px)';

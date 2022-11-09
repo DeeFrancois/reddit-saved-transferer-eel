@@ -14,7 +14,7 @@ import time
 import subprocess
 
 eel.init('web')
-eel.start('main.html',block=False,size=(1008,715))
+eel.start('main.html',block=False,size=(1310,864))
 
 def close(event):
     sys.exit(0)
@@ -77,6 +77,7 @@ def list_filterer(the_list):
     deleted_list = []
     comment_count = 0
     for i in the_list:
+        # print(i)
         current_filter = i.subreddit.display_name
         
         if isinstance(i,praw.models.Comment):
@@ -133,7 +134,8 @@ def display_loop(side):
                continue
             
     else:
-        for i in range(0,1000):
+        for i in range(1000):
+            # print("HEREEE")
             try:
                 data = [left_list[i].thumbnail,left_list[i].title[:33].replace('"',"'"),'/r/'+left_list[i].subreddit.display_name,'/u/'+left_list[i].author.name,left_list[i].filters,left_list[i].id,left_list[i].permalink]
                 eel.js_create_card(0,data,i)
@@ -143,7 +145,7 @@ def display_loop(side):
 
 @eel.expose
 def py_pullsaves(side):
-   # print("In Pull Saves")
+    print("In Pull Saves")
     global left_list
     global right_list
     if side == 1: #right side
@@ -157,12 +159,26 @@ def py_pullsaves(side):
     else:
         print("Initiated saved list retrieval for: ",username)
         user_object = r.user.me()
-        left_list=list(user_object.saved(limit=20))
-        print("Finished Pull",len(left_list))
+        left_list=list(user_object.saved(limit=10))
         left_list=list_filterer(left_list)
+        print("Finished Pull")
         display_loop(0)
         eel.js_saves_recieved(0)
    # print("Out Pull saves")
+
+# def pull_manual_list():
+#     thumbs=[]
+#     with open('manual_list.txt',encoding='utf-8') as file:
+#         for line in file:
+#             # print(line)  # The comma to suppress the extra new line char
+#             if ',F,' in line:
+#                 for j in line.split(','):
+#                     if '.jpg' in j or 'imgur' in j:
+#                         print(j)
+#                         thumbs.append(j)
+#     return thumbs
+
+
 
 @eel.expose
 def py_pullsub(side,sub,top_hot_new):

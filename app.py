@@ -4,6 +4,8 @@
 # crash proofing, feature disable during operation (crash proofing contd.), disabled thumbnails mode, multithreaded save pulls, 
 # clear "transferred" posts on new operation, finish transfer direction toggling, options for pull amount/transfer batch amount, 
 # Log out button 
+# TODO 11_9_22: Specific sub filter disabling
+# Fix Zoom (or not? new resizing seems to be enough)
 import eel
 import sys
 import praw
@@ -14,7 +16,8 @@ import time
 import subprocess
 
 eel.init('web')
-eel.start('main.html',block=False,size=(1310,864))
+# eel.start('main.html',block=False,size=(1310,864))
+eel.start('main.html',block=False,size=(1252,864))
 
 def close(event):
     sys.exit(0)
@@ -151,7 +154,7 @@ def py_pullsaves(side):
     if side == 1: #right side
         print("Initiated saved list retrieval for: ",username_b)
         user_object_b = r2.user.me()
-        right_list=list(user_object_b.saved(limit=100))
+        right_list=list(user_object_b.saved(limit=400))
         right_list=list_filterer(right_list)
        # print("Finished Pull")
         display_loop(1)
@@ -159,7 +162,7 @@ def py_pullsaves(side):
     else:
         print("Initiated saved list retrieval for: ",username)
         user_object = r.user.me()
-        left_list=list(user_object.saved(limit=10))
+        left_list=list(user_object.saved(limit=400))
         left_list=list_filterer(left_list)
         print("Finished Pull")
         display_loop(0)

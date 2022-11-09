@@ -1,4 +1,4 @@
-var left_displayed_count = 0;
+    var left_displayed_count = 0;
     var right_displayed_count = 0;
     var left_pulled =0;
     var right_pulled=0;
@@ -27,17 +27,20 @@ var left_displayed_count = 0;
     // });
 
     $(document).ready(function(){
-    $(document).bind("keydown", function(e){ 
-        if (e.target.nodeName.toLowerCase()=='input'){
-            return;
-        }
-        e = e || window.event;
-        var charCode = e.which || e.keyCode;
-        if(charCode == 68) eel.py_demo_mode_toggle();
-    });
+
+        $(document).bind("keydown", function(e){ 
+            if (e.target.nodeName.toLowerCase()=='input'){
+                return;
+            }
+            e = e || window.event;
+            var charCode = e.which || e.keyCode;
+            if(charCode == 68) eel.py_demo_mode_toggle();
+        });
+
     });
 
     function mousewheelHandler(e){
+        return;
        // console.log(e.deltaY);
         var temp = document.getElementById(curr_player);
         
@@ -141,8 +144,8 @@ var left_displayed_count = 0;
         document.getElementById("posting-as-button").style.display='inline-block';
         document.getElementById("submode-button").style.display='inline-block';
 
-        document.getElementById('pull_button_two').innerText="Pull Subreddit";
-        document.getElementById('pull_button_two').onclick=function(){request_sub(1);};
+        document.getElementById('right-pull-saves-button').innerText="Pull Subreddit";
+        document.getElementById('right-pull-saves-button').onclick=function(){request_sub(1);};
 
             if (transfer_from==0){
                 document.getElementById('right_pullsub_button').style.display='none';
@@ -173,8 +176,8 @@ var left_displayed_count = 0;
 
         submode=0;
 
-        document.getElementById('pull_button_two').innerText="Pull Saves";
-        document.getElementById('pull_button_two').onclick=function(){request_saves(1);};
+        document.getElementById('right-pull-saves-button').innerText="Pull Saves";
+        document.getElementById('right-pull-saves-button').onclick=function(){request_saves(1);};
         
         }
         
@@ -272,6 +275,21 @@ var left_displayed_count = 0;
         }
     }
 
+    function right_bar_handler(){
+        if (document.getElementById('right_specificCheck').checked){
+            if(document.getElementById('right_nsfwCheck').checked){
+            filter_unhide(1,'nsfw');
+            }
+            filter_unhide(1,'sfw');
+            
+            filter_only_show(1,document.getElementById('right_sub_bar').value);
+            console.log("Filtered");
+        }
+        else{
+            console.log("Not checked");
+        }
+    }
+
 
     function filter_checkbox_handler(side,el,filter){
        // console.log("Filtering with",filter);
@@ -343,9 +361,9 @@ var left_displayed_count = 0;
             }
         }
         else{
-            els = document.querySelectorAll(`[data-test*=' ${filter}']`);
+            els = document.querySelectorAll(`[data-test]`);
             for (var i=0; i<els.length; i++) {
-                if(els[i].parentNode.classList.contains('right-feed')){
+                if(els[i].parentNode.classList.contains('right-feed') && !els[i].getAttribute('data-test').includes(filter)){
                     els[i].className='hidden';
                 }
             }
@@ -659,7 +677,7 @@ var left_displayed_count = 0;
             for (var i=0; i<els.length; i++) {
                 els[i].style.filter='blur(0px)';
             }
-            $('#pull_button_two').click();
+            $('#right-pull-saves-button').click();
         }
     }
 
@@ -768,7 +786,7 @@ var left_displayed_count = 0;
             right_displayed_count=0;
             clear_feed(1);
             
-            document.getElementById('pull_button_two').innerText="Loading...";
+            document.getElementById('right-pull-saves-button').innerText="Loading...";
            // console.log("JAVASCRIPT sending request to PYTHON to pullsaves for user TWO");
             document.getElementById('right-feed-label').innerHTML="Placeholder's Saved List ";
 
@@ -812,18 +830,20 @@ var left_displayed_count = 0;
             if (document.getElementById('textCheck').checked){
                 filter_unhide(0,'textpost');
             }
+            document.querySelector('#leftfeed').querySelector('.post-container:not(.hidden)').click();
         }
         if (side == 1){
             if (document.getElementById('right_nsfwCheck').checked){
                 filter_unhide(1,'nsfw');
             }
-
+            
             if (document.getElementById('right_sfwCheck').checked){
                 filter_unhide(1,'safefw');
             }
             if (document.getElementById('right_textCheck').checked){
                 filter_unhide(1,'textpost');
             }
+            document.querySelector('#rightfeed').querySelector('.post-container:not(.hidden)').click();
         }
        // console.log("Finished applying filters");
     }
@@ -840,7 +860,7 @@ var left_displayed_count = 0;
         }
         else{
            // console.log("Recieved right side list");
-            document.getElementById('pull_button_two').innerText="Pull Saves";
+            document.getElementById('right-pull-saves-button').innerText="Pull Saves";
             right_pulled=1;
             apply_prechecked_filters(1);
         }

@@ -224,7 +224,7 @@ def pull_link(data):
     if '.png' in data.url or '.jpg' in data.url or '.jpeg' in data.url:
         player_select=2
     elif 'gfycat.com' in data.url:
-        output_link = 'https://gfycat.com/ifr/search/' + data.url.split('.com/')[1]
+        output_link = 'https://gfycat.com/ifr/search/' + data.url.split('.com/')[1] + '?hd=1'
         player_select=0 #iframe
     elif 'redgifs.com' in data.url:
         output_link = data.url.replace('watch','ifr')
@@ -294,6 +294,7 @@ def py_save_current(side,curr_id): #side for profile
 def py_download_current():
     print("Downloading: ",last_link)
     subprocess.run(["yt-dlp"," {}".format(last_link[0]),"--no-mtime","-o","downloads/{}_{}.%(ext)s".format(last_link[1],last_link[2])])
+    return
 @eel.expose
 def py_transfer_current(from_side,curr_id,unsave_flag):
         if from_side == 0: #Left

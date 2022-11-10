@@ -20,6 +20,7 @@
     var stored_logins = [];
     var cred_index=0;
     var automation_kill_switch=0;
+    var download_automation_kill_switch=0;
     var last_index = 0;
     var last_side = 0;
     // $(window).resize(function(){
@@ -37,7 +38,27 @@
             if(charCode == 68) eel.py_demo_mode_toggle();
         });
 
+        document.addEventListener('error', function(e) {
+            if(e.target.className=='mid-player mid-image'){
+                if(document.querySelector('#mid-iframe').src.includes('gfycat')){
+                    iframe_error_handler();
+                }
+            }
+        }, true);
+
     });
+
+    function iframe_error_handler(){
+        console.log("Handling error");
+        // console.log(event);
+
+        if (document.querySelector('#mid-iframe').src.includes('search')){
+            console.log('search exists');
+            let curr_link = document.querySelector('#mid-iframe').src;
+            let fixed_link = curr_link.replace('search/','');
+            document.querySelector('#mid-iframe').src=fixed_link;
+        }
+    }
 
     function mousewheelHandler(e){
         return;
@@ -523,7 +544,52 @@
         console.log("Clearing transfers");
         document.querySelectorAll('.transferred').forEach(e=>e.remove());
         }
-    
+    async function automate_downloads(side){
+        download_automation_kill_switch=0;
+        if (side == 0){
+            var els = document.querySelectorAll('#leftfeed > .post-container:not(.hidden)');
+        }
+        else{
+            var els = document.querySelectorAll('#rightfeed > .post-container:not(.hidden)');
+        }
+
+        document.getElementById('download-automation-button').onclick=function(){download_automation_kill_switch=1; this.innerText='Start Downloads';};
+        document.getElementById('download-automation-button').innerText="Stop";
+        
+        for (var i = 0; i < 10;i++){
+            
+            if (download_automation_kill_switch){
+                download_automation_kill_switch=0;
+                document.getElementById('download-automation-button').innerText="Start Downloads";
+                document.getElementById('download-automation-button').onclick=function(){download_automation_kill_switch=0;this.innerText='Stop';automate_downloads(0);};
+                return;
+            }
+            if(els[i].classList.contains('hidden')){
+                continue;
+            }
+            if(els[i].classList.contains('post-container')){
+                
+                els[i].click();
+                if (submode==0){ //Save Transfer
+                await eel.py_download_current()().then((msg)=>{console.log(msg);
+                    
+                    document.getElementById('leftfeed').firstChild.remove();
+
+                });
+                }
+
+                // if (unsave_after_transfer_flag){
+                els[i].remove();
+                // }
+
+            }
+        }
+        document.getElementById('download-automation-button').innerText="Start Downloads";
+        document.getElementById('download-automation-button').onclick=function(){download_automation_kill_switch=0;this.innerText='Stop';automate_downloads(0);};
+
+
+
+    }
     async function automation(side){
         console.log("AUTOMATIO NFUNCTIOn");
         if(submode && selected_sub==''){

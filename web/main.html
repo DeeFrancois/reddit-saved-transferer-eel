@@ -308,6 +308,7 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
     display: block;
     position: relative;
     text-align: center;
+    margin-top: 10px;
 }
 .middle-button{
     display: inline-block;
@@ -520,8 +521,8 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
             <button class="middle-button" id="post-button" onclick="post_current()" style="display:none;">Post</button>
             <button class="middle-button" id="posting-as-button" onclick="toggle_posting_as()"style="display:none;width:135px;">Posting as: LEFT</button>
             <button class="middle-button" id="submode-button" onclick="save_current()"style="display:none;">Save</button>
-            <button class="middle-button automation-button" id="automation-button" onclick="automation(0)">Automate Transfers</button>
-            <button class="middle-button automation-button" id="transfer-button" onclick="automation(0)">Automate Downloads</button>
+            <button class="middle-button automation-button" id="automation-button" onclick="automation(0)" disabled>Automate Transfers</button>
+            <button class="middle-button automation-button" id="download-automation-button" onclick="automate_downloads(0)">Automate Downloads</button>
         
         </div>
 

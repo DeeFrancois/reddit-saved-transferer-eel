@@ -14,6 +14,8 @@ import json
 import youtube_dl
 import time
 import subprocess
+from bs4 import BeautifulSoup
+import requests
 
 eel.init('web')
 # eel.start('main.html',block=False,size=(1310,864))
@@ -162,7 +164,7 @@ def py_pullsaves(side):
     else:
         print("Initiated saved list retrieval for: ",username)
         user_object = r.user.me()
-        left_list=list(user_object.saved(limit=400))
+        left_list=list(user_object.saved(limit=100))
         left_list=list_filterer(left_list)
         print("Finished Pull")
         display_loop(0)
@@ -215,6 +217,29 @@ def py_pullsub(side,sub,top_hot_new):
         display_loop(0)
         eel.js_saves_recieved(0)
 
+def gfycat_source(url):
+    soup = BeautifulSoup(requests.get(url).content, 'html.parser')
+    # print(soup)
+    return [item.get('src') for item in list(soup.find_all("source")) if item.get('src') is not None and 'mobile' not in item.get('src') and 'mp4' in item.get('src')][0]
+def download_redgif(): 
+    # ..if you see this no you don't
+    session = requests.Session()
+    id = last_link[0].split('/')[-1]
+    header={'Authorization': download_headers.strip()}
+    api_url='https://api.redgifs.com/v2/gifs/{}'.format(id)
+    # api_url='https://api.redgifs.com/v1/oembed?url={}'.format(id)
+    req1 = session.get(api_url,headers=header)
+    # print(req1.json())
+    video_url=req1.json()['gif']['urls']['hd']
+    with session.get(video_url,stream=True) as r:
+        r.raise_for_status()
+        with open('downloads/{}_{}.mp4'.format(last_link[1],last_link[2]), 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192): 
+                # If you have chunk encoded response uncomment if
+                # and set chunk_size parameter to None.
+                #if chunk: 
+                f.write(chunk)
+            print("finished download")
 
 def pull_link(data):
     global last_link
@@ -225,9 +250,15 @@ def pull_link(data):
         player_select=2
     elif 'gfycat.com' in data.url:
         output_link = 'https://gfycat.com/ifr/search/' + data.url.split('.com/')[1] + '?hd=1'
+        # output_link=gfycat_source(data.url) #Only if I care about hiding frame
+        print('GFYCAT:',output_link)
         player_select=0 #iframe
     elif 'redgifs.com' in data.url:
+        print(data.url)
         output_link = data.url.replace('watch','ifr')
+        #https://api.redgifs.com/v1/oembed?url=https://www.redgifs.com/watch/lameoutstandinghoatzin
+        # output_link=redgifs_source(data.url)
+        print('REDGIFS:',output_link)
         player_select=0
     elif 'i.imgur.com' in data.url:
         output_link = data.url.replace('.gifv','.mp4')
@@ -292,8 +323,12 @@ def py_save_current(side,curr_id): #side for profile
 
 @eel.expose
 def py_download_current():
-    print("Downloading: ",last_link)
-    subprocess.run(["yt-dlp"," {}".format(last_link[0]),"--no-mtime","-o","downloads/{}_{}.%(ext)s".format(last_link[1],last_link[2])])
+    print("Downloadinggg: ",last_link)
+    if ('redgifs' in last_link[0]):
+        print("DOWNLOADING REDGIFS")
+        download_redgif()
+    else:
+        subprocess.run(["yt-dlp"," {}".format(last_link[0]),"--no-mtime","-o","downloads/{}_{}.%(ext)s".format(last_link[1],last_link[2])])
     return
 @eel.expose
 def py_transfer_current(from_side,curr_id,unsave_flag):
@@ -376,10 +411,13 @@ def py_post_current(posting_as,unsave_from,target_sub,curr_id):
 @eel.expose        
 def import_logins():
     global demo_mode_flag
+    global download_headers
     demo_mode_flag=1
     if(os.path.exists('login.txt')):  #If login already exists
             with open('login.txt') as file:
                 eel.js_import_login_file(file.read())
+    with open('headers.txt') as file:
+        download_headers = file.read() 
 @eel.expose
 def py_login(left_right,data):
     global username

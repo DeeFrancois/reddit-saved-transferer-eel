@@ -56,6 +56,7 @@
             console.log('search exists');
             let curr_link = document.querySelector('#mid-iframe').src;
             let fixed_link = curr_link.replace('search/','');
+            // let experiment = 'https://giant.gycat.com/'+curr_link.split('/').pop();
             document.querySelector('#mid-iframe').src=fixed_link;
         }
     }

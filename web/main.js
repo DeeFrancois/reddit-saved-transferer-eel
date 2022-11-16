@@ -23,6 +23,7 @@
     var download_automation_kill_switch=0;
     var last_index = 0;
     var last_side = 0;
+    var zoom_flag=0;
     // $(window).resize(function(){
     // window.resizeTo(size[0],size[1]);
     // });
@@ -62,8 +63,59 @@
     }
 
     function mousewheelHandler(e){
+        console.log(e.deltaY);
+        console.log(e);
+        if (!(e.target.className=='middle-column' || e.target.parentNode.className=='middle-column' || e.target.nodeName=='BODY')){
+            // if(e.target.nodeName=='BODY'){ //ZOOM OUT
+            //     zoom_flag=0;
+            //     document.querySelector('body').style.backgroundColor='#444444'
+            //     document.querySelectorAll('.side-column')[0].style.left=0;
+            //     document.querySelectorAll('.side-column')[1].style.right=0;
+            //     document.querySelector('.video-player-container').className='video-player-container';
+            //     document.querySelector('.video-player-container').style.removeProperty('height');
+            //     document.querySelector('.video-player-container').style.removeProperty('width');
+            // }
+            return;
+        }
+        if (e.deltaY < 0 && zoom_flag==0){
+            zoom_flag=1;
+            document.querySelector('body').style.backgroundColor='black'
+            document.querySelectorAll('.side-column')[0].style.left=0;
+            setTimeout(function(){
+                document.querySelectorAll('.side-column')[0].style.left='-360px';
+                
+            },100);
+            document.querySelectorAll('.side-column')[1].style.right=0;
+            setTimeout(function(){
+                document.querySelectorAll('.side-column')[1].style.right='-360px';
+                
+            },100);
+
+            document.querySelector('.video-player-container').className+=' zoomed-video';
+            setTimeout(function(){
+                document.querySelector('.video-player-container').style.height='95%';
+                document.querySelector('.video-player-container').style.width=document.querySelector('body').clientWidth*.95;
+
+            },100);
+            document.querySelectorAll('.middle-direction,.middle-top-control-center,.post-container.unstyled,.mid-bottom-controls').forEach(e=>e.style.opacity=0);
+
+            
+        }
+        else if(e.deltaY > 0 && zoom_flag){
+            zoom_flag=0;
+            document.querySelector('body').style.backgroundColor='#444444'
+            document.querySelectorAll('.side-column')[0].style.left=0;
+            document.querySelectorAll('.side-column')[1].style.right=0;
+            document.querySelector('.video-player-container').className='video-player-container';
+
+            document.querySelector('.video-player-container').style.removeProperty('height');
+            document.querySelector('.video-player-container').style.removeProperty('width');
+            document.querySelectorAll('.middle-direction,.middle-top-control-center,.post-container.unstyled,.mid-bottom-controls').forEach(e=>e.style.opacity=1);
+
+
+        }
         return;
-       // console.log(e.deltaY);
+       // Old zoom
         var temp = document.getElementById(curr_player);
         
         if(e.deltaY / 120 < 0 && allow_video){
@@ -82,41 +134,15 @@
                 
 
             }
-           // console.log('Zoom in');
-            //temp.style.height=temp.offsetHeight+20+'px';
-           // console.log((curr_scale+.5)*temp.getBoundingClientRect().width,(curr_scale+.5)*temp.getBoundingClientRect().height);
-            
-            
-           // console.log("here..");
-            //temp.style.width=temp.offsetWidth+80+'px';
-            //temp.style.height=(temp.offsetWidth*curr_aspectratio)+'px';
+           
             curr_scale+=.5;
-           // console.log(curr_scale);
             temp.style.transform=`translate(-50%, -50%) scale(${curr_scale},${curr_scale})`;
-            //console.log(temp.style.transform);
-           // console.log(temp.offsetWidth);
-           // console.log(temp.getBoundingClientRect().width);
-
-            
-                
-            //if(temp.offsetHeight>310){
-            //    document.getElementById('gridcontainer').style.filter='blur(1px)';
-            //    document.getElementById('videoplayerdiv').style.filter='blur(0px)';
-            //}
-        
-        
-            //temp.style.maxWidth='none';
-            //temp.style.maxHeight='580px';
-            
+  
         } else{
             if(1 || temp.offsetHeight <= originalheight+80){ //in case I want to add zoom out back
                 temp.className=curr_player;
                 curr_scale=1;
-                //temp.style.height=originalheight+'px';
-                //temp.style.width=originalwidth+'px';
                 zoomed=0;
-                //temp.style.height='none';
-                //temp.style.width='none';
                 temp.style.transform='scale(1,1)';
                 
             }
@@ -128,8 +154,6 @@
             
 
 
-            //console.log('zoom out');
-            //document.getElementById('mid-video').style.height=document.getElementById('mid-video').offsetHeight-20+'px';
 
         }
     }

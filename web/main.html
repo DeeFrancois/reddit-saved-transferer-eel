@@ -67,6 +67,7 @@ html,body{
     display: flex;
     position: relative;
     margin: 0;
+    transition: 2s;
     
 }
 .side-column{
@@ -83,7 +84,7 @@ html,body{
     max-width: 330px;
     min-width: 330px;
     color: rgb(230, 230, 230);
-
+    transition: 2s;
 }
 .login-container{
     display: block;
@@ -359,8 +360,19 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
     left:58%;
     width:125px;
 }
+
+.zoomed-video{
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    z-index: 1;
+    transition: height 1s, width 2s;
+}
 </style>
-<body>
+<body onwheel="mousewheelHandler(event)">
     <div class="side-column">
         
         <div class="login-container">
@@ -467,7 +479,7 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
         </div>
     </div>
 
-    <div class="middle-column" onwheel="mousewheelHandler(event)">
+    <div class="middle-column">
         
         <div class="middle-direction">
 
@@ -503,9 +515,9 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
             </div>
 
         </div>
-        <div class="video-player-container" id="videoplayerdiv" style="padding-top: 10px;">
+        <div class="video-player-container" id="videoplayerdiv" style="padding-top: 10px;"onwheel="mousewheelHandler(event)">
 
-            <iframe class="mid-player mid-iframe" id="mid-iframe" src="" scrolling="no" frameborder="0" onwheel="mousewheelHandler(event)">
+            <iframe class="mid-player mid-iframe" id="mid-iframe" src="" scrolling="no" frameborder="0" >
             </iframe>
             <video class="mid-player mid-video" id="mid-video" controls autoplay muted loop src="">
             </video>

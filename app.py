@@ -132,7 +132,7 @@ def display_loop(side):
     if side == 1:#right side
         for i in range(0,500):
             try:
-                data = [right_list[i].thumbnail,right_list[i].title[:33].replace('"',"'"),'/r/'+right_list[i].subreddit.display_name,'/u/'+right_list[i].author.name,right_list[i].filters,right_list[i].id,right_list[i].permalink]
+                data = [right_list[i].thumbnail,right_list[i].title.replace('"',"'"),'/r/'+right_list[i].subreddit.display_name,'/u/'+right_list[i].author.name,right_list[i].filters,right_list[i].id,right_list[i].permalink]
                 eel.js_create_card(1,data,i)
             except:
                # print("end of list")
@@ -142,7 +142,7 @@ def display_loop(side):
         for i in range(1000):
             # print("HEREEE")
             try:
-                data = [left_list[i].thumbnail,left_list[i].title[:33].replace('"',"'"),'/r/'+left_list[i].subreddit.display_name,'/u/'+left_list[i].author.name,left_list[i].filters,left_list[i].id,left_list[i].permalink]
+                data = [left_list[i].thumbnail,left_list[i].title.replace('"',"'"),'/r/'+left_list[i].subreddit.display_name,'/u/'+left_list[i].author.name,left_list[i].filters,left_list[i].id,left_list[i].permalink]
                 eel.js_create_card(0,data,i)
             except:
                # print("end of list")

@@ -24,6 +24,8 @@
     var last_index = 0;
     var last_side = 0;
     var zoom_flag=0;
+    var left_user='';
+    var right_user='';
     // $(window).resize(function(){
     // window.resizeTo(size[0],size[1]);
     // });
@@ -743,8 +745,8 @@
     function js_loggedin(side,info){
         if (side==0){
             var test=document.getElementById('login_user');
-            //test.innerText="Logged in: " + info[0];
-            test.innerText="Logged in: " + "Placeholder1"
+            test.innerText="Logged in as: " + info[0];
+            // test.innerText="Logged in as: " + "Placeholder1"
             //UNBLUR
             $('#left-login-page').hide();
            // console.log("Unblurring");
@@ -753,21 +755,27 @@
             for (var i=0; i<els.length; i++) {
                 els[i].style.filter='blur(0px)';
             }
-            
+
+            document.querySelector('.profile-picture').src=info[2];
+            left_user=info[0]
+
             $('#pull_button').click();
             
             //request_saves(0);
 
         } else{
             var test=document.getElementById('login_user_two');
-            //test.innerText="Logged in: " + info[0];
-            test.innerText="Logged in: " + "Placeholder2";
+            test.innerText="Logged in as: " + info[0];
+            // test.innerText="Logged in as: " + "Placeholder2";
             //request_saves(1);
+            
             $('#right-login-page').hide();
             var els = document.querySelectorAll(`[class*='right-grid-item'],[class*='mid-grid-item']`);
             for (var i=0; i<els.length; i++) {
                 els[i].style.filter='blur(0px)';
             }
+            document.querySelectorAll('.profile-picture')[1].src=info[2];
+            right_user=info[0]
             $('#right-pull-saves-button').click();
         }
     }
@@ -870,16 +878,18 @@
             clear_feed(0);
             document.getElementById('pull_button').innerText="Loading...";
            // console.log("JAVASCRIPT sending request to PYTHON to pullsaves for user ONE");
-            document.getElementById('feed-label').innerHTML="Placeholder's Saved List ";
-
+            // document.getElementById('feed-label').innerHTML="Placeholder's Saved List ";
+            document.getElementById('feed-label').innerHTML=`${left_user}'s Saved List `;
+            
             eel.py_pullsaves(0);
         } else{
             right_displayed_count=0;
             clear_feed(1);
             
             document.getElementById('right-pull-saves-button').innerText="Loading...";
-           // console.log("JAVASCRIPT sending request to PYTHON to pullsaves for user TWO");
-            document.getElementById('right-feed-label').innerHTML="Placeholder's Saved List ";
+            // console.log("JAVASCRIPT sending request to PYTHON to pullsaves for user TWO");
+            // document.getElementById('right-feed-label').innerHTML="Placeholder's Saved List ";
+            document.getElementById('right-feed-label').innerHTML=`${right_user}'s Saved List `;
 
             eel.py_pullsaves(1);
         }

@@ -444,7 +444,9 @@ def py_login(left_right,data):
                         username=username)
 
        # print("Sending request from PYTHON to JAVASCRIPT to display logged in state LEFT SIDE")
-        eel.js_loggedin(0,[username,client_id])
+        red = r.redditor(username)
+        
+        eel.js_loggedin(0,[username,client_id,red.icon_img])
     else:
         username_b=data[0]
         password_b=data[1]
@@ -459,7 +461,8 @@ def py_login(left_right,data):
                         username=username_b)
 
        # print("Sending request from PYTHON to JAVASCRIPT to display logged in state RIGHT SIDE")
-        eel.js_loggedin(1,[username_b,client_id_b])
+        red = r.redditor(username)
+        eel.js_loggedin(1,[username_b,client_id_b,red.icon_img])
 
 import_logins()
 while True:

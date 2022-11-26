@@ -107,6 +107,7 @@ html,body{
     position: relative;
     font-size: 14px;
     padding: 10px;
+    white-space: nowrap;
 }
 .pull-saves-button{
     display: block;
@@ -242,6 +243,7 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
     /* width: 50%; */
     height: 100%;
     color: white;
+
 }
 .middle-direction{
     display: block;
@@ -249,6 +251,7 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
     font-size: 18px;
     width: 100%;
     text-align: center;
+    
 }
 .transfer-pic{
     display: block;
@@ -375,6 +378,16 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
     z-index: 1;
     transition: height 1s, width 1.3s;
 }
+.middle-input{
+    display: inline-block;
+    position: relative;
+    width:40px;
+    color:white;
+    background-color:#1d1d1d;
+    margin-top:10px; 
+    height:30px;
+    text-align: center;
+}
 </style>
 <body onwheel="mousewheelHandler(event)">
     <div class="side-column">
@@ -484,7 +497,6 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
     </div>
 
     <div class="middle-column">
-        
         <div class="middle-direction">
 
             <h4 class="direction-label">Transfer Direction</h4>
@@ -539,6 +551,7 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
             <button class="middle-button" id="posting-as-button" onclick="toggle_posting_as()"style="display:none;width:135px;">Posting as: LEFT</button>
             <button class="middle-button" id="submode-button" onclick="save_current()"style="display:none;">Save</button>
             <button class="middle-button automation-button" id="automation-button" onclick="automation(0)" disabled>Automate Transfers</button>
+            <input class='middle-input' type="text" id="automation-input" onKeyUp="update_automation_amount(this.value)" value="10">
             <button class="middle-button automation-button" id="download-automation-button" onclick="automate_downloads(0)">Automate Downloads</button>
         
         </div>

@@ -26,6 +26,8 @@
     var zoom_flag=0;
     var left_user='';
     var right_user='';
+    var automation_amount = 10;
+    var folder_size=0;
     // $(window).resize(function(){
     // window.resizeTo(size[0],size[1]);
     // });
@@ -64,10 +66,15 @@
         }
     }
 
+    function update_automation_amount(count){
+        automation_amount=parseInt(count);
+        console.log(automation_amount);
+    }
+
     function mousewheelHandler(e){
         console.log(e.deltaY);
         console.log(e);
-        if (!(e.target.className=='middle-column' || e.target.parentNode.className=='middle-column' || e.target.nodeName=='BODY')){
+        if (!(e.target.className=='middle-column' || e.target.className=='transfer-direction' || e.target.parentNode.className=='middle-column' || e.target.nodeName=='BODY')){
             // if(e.target.nodeName=='BODY'){ //ZOOM OUT
             //     zoom_flag=0;
             //     document.querySelector('body').style.backgroundColor='#444444'
@@ -81,7 +88,7 @@
         }
         if (e.deltaY < 0 && zoom_flag==0){
             zoom_flag=1;
-            document.querySelector('body').style.backgroundColor='black'
+            document.querySelector('body').style.backgroundColor='rgb(4 4 4)'
             document.querySelectorAll('.side-column')[0].style.left=0;
             setTimeout(function(){
                 document.querySelectorAll('.side-column')[0].style.left='-360px';
@@ -95,7 +102,7 @@
 
             document.querySelector('.video-player-container').className+=' zoomed-video';
             setTimeout(function(){
-                document.querySelector('.video-player-container').style.height='95%';
+                document.querySelector('.video-player-container').style.height='90%';
                 document.querySelector('.video-player-container').style.width=document.querySelector('body').clientWidth*.95;
 
             },100);
@@ -567,6 +574,12 @@
     function lock_right_changes(){
         return;
     }
+    eel.expose(js_update_folder_size)
+    function js_update_folder_size(folder_size){
+        
+        document.querySelector('#download-automation-button').innerText='Automate Downloads - ' + folder_size + 'MB';
+    
+    }
     function clear_transfer_cards(){
         console.log("Clearing transfers");
         document.querySelectorAll('.transferred').forEach(e=>e.remove());
@@ -583,8 +596,7 @@
         document.getElementById('download-automation-button').onclick=function(){download_automation_kill_switch=1; this.innerText='Start Downloads';};
         document.getElementById('download-automation-button').innerText="Stop";
         
-        for (var i = 0; i < 10;i++){
-            
+        for (var i = 0; i < automation_amount;i++){
             if (download_automation_kill_switch){
                 download_automation_kill_switch=0;
                 document.getElementById('download-automation-button').innerText="Start Downloads";
@@ -733,6 +745,7 @@
         //eel.py_make_selection(side,index);
         make_selection(side,index);
         document.getElementById('middle-thumbnail').src=details[0];
+        // document.querySelector('.blurred-image').src=details[0];
         //console.log(details[0]);
         document.getElementById('middle-title').innerText=details[1];
         document.getElementById('middle-subreddit').innerText=details[2];
@@ -1000,7 +1013,6 @@
                     })).append($('<p/>',{
                         text:data[3]})) //aUTHOR
                 ).appendTo('#leftfeed');
-            
         }
         else{
             right_displayed_count+=1;
@@ -1026,6 +1038,8 @@
                     })).append($('<p/>',{
                         text:data[3]})) //Permalink
                 ).appendTo('#rightfeed');
+
+               
 
             }
         

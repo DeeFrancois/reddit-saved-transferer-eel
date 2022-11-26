@@ -183,8 +183,6 @@ def py_pullsaves(side):
 #                         thumbs.append(j)
 #     return thumbs
 
-
-
 @eel.expose
 def py_pullsub(side,sub,top_hot_new):
     global left_list
@@ -217,10 +215,19 @@ def py_pullsub(side,sub,top_hot_new):
         display_loop(0)
         eel.js_saves_recieved(0)
 
+def update_folder_size():
+    size=0
+    for path, dirs, files in os.walk('downloads/'):
+        for f in files:
+            fp = os.path.join(path, f)
+            size += os.path.getsize(fp)
+    return int(size/1000000)
+
 def gfycat_source(url):
     soup = BeautifulSoup(requests.get(url).content, 'html.parser')
     # print(soup)
     return [item.get('src') for item in list(soup.find_all("source")) if item.get('src') is not None and 'mobile' not in item.get('src') and 'mp4' in item.get('src')][0]
+
 def download_redgif(): 
     # ..if you see this no you don't
     session = requests.Session()
@@ -329,6 +336,8 @@ def py_download_current():
         download_redgif()
     else:
         subprocess.run(["yt-dlp"," {}".format(last_link[0]),"--no-mtime","-o","downloads/{}_{}.%(ext)s".format(last_link[1],last_link[2])])
+    folder_size=update_folder_size()
+    eel.js_update_folder_size(folder_size)
     return
 @eel.expose
 def py_transfer_current(from_side,curr_id,unsave_flag):
@@ -463,6 +472,15 @@ def py_login(left_right,data):
        # print("Sending request from PYTHON to JAVASCRIPT to display logged in state RIGHT SIDE")
         red = r.redditor(username)
         eel.js_loggedin(1,[username_b,client_id_b,red.icon_img])
+# def pull_comments():
+#     redditor = r.user.me()
+#     print(redditor)
+#     for comment in redditor.comments.new(limit=None):
+#         if(comment.score > 20):
+#             print(comment.body)
+#         else:
+#             comment.delete()
+#     return
 
 import_logins()
 while True:

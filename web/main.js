@@ -586,7 +586,7 @@
         }
     async function automate_downloads(side){
         download_automation_kill_switch=0;
-        if (side == 0){
+        if (last_side==0){
             var els = document.querySelectorAll('#leftfeed > .post-container:not(.hidden)');
         }
         else{

@@ -577,30 +577,35 @@
     eel.expose(js_update_folder_size)
     function js_update_folder_size(folder_size){
         
-        document.querySelector('#download-automation-button').innerText='Automate Downloads - ' + folder_size + 'MB';
+        // document.querySelector('#download-automation-button').innerText='Automate Downloads - ' + folder_size + 'MB';
     
     }
     function clear_transfer_cards(){
         console.log("Clearing transfers");
         document.querySelectorAll('.transferred').forEach(e=>e.remove());
         }
+        
     async function automate_downloads(side){
         download_automation_kill_switch=0;
-        if (last_side==0){
+        if (side==0){
             var els = document.querySelectorAll('#leftfeed > .post-container:not(.hidden)');
+            var current_button = document.querySelector('#left-automation-button');
+            var other_button = document.querySelector('#right-automation-button');
         }
         else{
             var els = document.querySelectorAll('#rightfeed > .post-container:not(.hidden)');
+            var current_button = document.querySelector('#right-automation-button');
+            var other_button = document.querySelector('#right-automation-button');
         }
 
-        document.getElementById('download-automation-button').onclick=function(){download_automation_kill_switch=1; this.innerText='Start Downloads';};
-        document.getElementById('download-automation-button').innerText="Stop";
+        current_button.onclick=function(){download_automation_kill_switch=1; this.innerText='Start Downloads';};
+        current_button.innerText="Stop";
         
         for (var i = 0; i < automation_amount;i++){
             if (download_automation_kill_switch){
                 download_automation_kill_switch=0;
-                document.getElementById('download-automation-button').innerText="Start Downloads";
-                document.getElementById('download-automation-button').onclick=function(){download_automation_kill_switch=0;this.innerText='Stop';automate_downloads(0);};
+                current_button.innerText="Start Downloads";
+                current_button.onclick=function(){download_automation_kill_switch=0; other_button.state='disabled'; this.innerText='Stop';automate_downloads(side);};
                 return;
             }
             if(els[i].classList.contains('hidden')){
@@ -612,7 +617,7 @@
                 if (submode==0){ //Save Transfer
                 await eel.py_download_current()().then((msg)=>{console.log(msg);
                     
-                    document.getElementById('leftfeed').firstChild.remove();
+                    els[i].remove();
 
                 });
                 }
@@ -623,10 +628,8 @@
 
             }
         }
-        document.getElementById('download-automation-button').innerText="Start Downloads";
-        document.getElementById('download-automation-button').onclick=function(){download_automation_kill_switch=0;this.innerText='Stop';automate_downloads(0);};
-
-
+        current_button.innerText="Start Downloads";
+        current_button.onclick=function(){download_automation_kill_switch=0; other_button.state='disabled';this.innerText='Stop';automate_downloads(side);};
 
     }
     async function automation(side){

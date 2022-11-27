@@ -224,7 +224,7 @@ html,body{
     position: relative;
     width: 100%;
     max-width: 330px;
-    padding-top: 20px;
+    padding-top: 2px;
     text-align: center;
     margin: auto;
 }
@@ -336,6 +336,20 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
     width:fit-content;
     height: 34px;
     font-size: 21px;
+}
+.side-automation-button{
+    display: block;
+    margin: auto;
+    margin-top: 10px;
+    width:fit-content;
+    height: 34px;
+    font-size: 21px;
+    height:32px;
+    background-color:#1b1b1bc2;
+    color:rgb(230, 230, 230);
+    transition-duration: 0.2s;
+    cursor: pointer;
+    
 }
 .video-player-container{
     display: block;
@@ -492,19 +506,20 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
                     <label for="newCheck">New (Subreddit)</label>
                 </div>
             </div>
-
+            <button class="side-automation-button" id="left-automation-button" onclick="automate_downloads(0)">Start Downloads</button>
+            
         </div>
     </div>
-
+    
     <div class="middle-column">
         <div class="middle-direction">
-
+            
             <h4 class="direction-label">Transfer Direction</h4>
             <p class="transfer-direction"><img src="thumbs/right_arrow.png" id="transfer_img" class="transfer-pic" alt="Avatar" onclick="toggle_transfer_direction()"></p>
-        
+            
         </div>
         <div class="middle-top-control-center">
-
+            
             <div>
                 <input type="checkbox" id="videoCheck" checked onclick="toggle_video()">
                 <label for="videoCheck">Video Player</label>
@@ -529,7 +544,7 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
                 <p id="middle-subreddit">/r/Subreddit</p>
                 <a id="middle-hotlink" href="https://www.google.com" target="_blank" style="color: white;">Open in Browser</a>
             </div>
-
+            
         </div>
         <div class="video-player-container" id="videoplayerdiv" style="padding-top: 10px;"onwheel="mousewheelHandler(event)">
 
@@ -538,10 +553,10 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
             <video class="mid-player mid-video" id="mid-video" controls autoplay muted loop src="">
             </video>
             <img class="mid-player mid-image" id="mid-image" src="">
-        
+            
         </div>
         <div class="mid-bottom-controls">
-
+            
             <button class="middle-button" id="unsave-button" onclick="unsave_current()">Unsave</button>
             <button class="middle-button" id="transfer-button" onclick="transfer_current()">Transfer</button>
             <button class="middle-button" id="download-button" onclick="download_current()">Download</button>
@@ -552,12 +567,11 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
             <button class="middle-button" id="submode-button" onclick="save_current()"style="display:none;">Save</button>
             <button class="middle-button automation-button" id="automation-button" onclick="automation(0)" disabled>Automate Transfers</button>
             <input class='middle-input' type="text" id="automation-input" onKeyUp="update_automation_amount(this.value)" value="10">
-            <button class="middle-button automation-button" id="download-automation-button" onclick="automate_downloads(0)">Automate Downloads</button>
-        
+            
         </div>
-
+        
     </div>
-
+    
     <div class="side-column">
         
         <div class="login-container">
@@ -575,7 +589,7 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
             </div>
 
         </div>
-
+        
         <div class="feed-container right-feed" id="rightfeed">
 
             <div class = "login-page" id="right-login-page">
@@ -602,7 +616,7 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
                         <label for="right_user_agent_label">User Agent</label>
                         <input type="password"  class="credentials-bar" id="right_user_agent_label">
                     </div>
-                     
+                    
                 </div>
                 <div class="login-buttons">
                     <button class='login-credentials-button' onclick="cycle_logins(1)">Cycle Logins</button>
@@ -611,17 +625,17 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
                     
                 </div>
             </div>
-
-
+            
+            
         </div>
-
+        
         <div class="control-box" id="right-footer">
             <div class="control-box-top">
-                    <input class='control-box-input' type="text" id="right_sub_bar" onKeyUp="right_bar_handler()"></button>
+                <input class='control-box-input' type="text" id="right_sub_bar" onKeyUp="right_bar_handler()"></button>
                     <button class='login-credentials-button' type="button" id="right_pullsub_button" onclick="request_sub(1)">Pull Subreddit</button>
                     <button class='login-credentials-button selectsub' type="button" id="right_selectsub_button" onclick="select_sub(1)">Select Subreddit</button>
             </div>
-
+            
             <div class="checkbox-container" id="right-checkbox-container">
                 <div>
                     <input checked type="checkbox" id="right_sfwCheck" onclick="filter_checkbox_handler(1,this,'safefw')">
@@ -660,7 +674,8 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
                     <label for="right_newCheck">New (Subreddit)</label>
                 </div>
             </div>
-
+            <button class="side-automation-button" id="right-automation-button" onclick="automate_downloads(1)">Start Downloads</button>
+            
         </div>
     </div>
 

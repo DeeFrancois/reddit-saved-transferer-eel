@@ -591,21 +591,22 @@
             var els = document.querySelectorAll('#leftfeed > .post-container:not(.hidden)');
             var current_button = document.querySelector('#left-automation-button');
             var other_button = document.querySelector('#right-automation-button');
+            console.log(other_button);
         }
         else{
             var els = document.querySelectorAll('#rightfeed > .post-container:not(.hidden)');
             var current_button = document.querySelector('#right-automation-button');
-            var other_button = document.querySelector('#right-automation-button');
+            var other_button = document.querySelector('#left-automation-button');
         }
 
-        current_button.onclick=function(){download_automation_kill_switch=1; this.innerText='Start Downloads';};
+        current_button.onclick=function(){download_automation_kill_switch=1; other_button.disabled=false;this.innerText='Start Downloads';};
         current_button.innerText="Stop";
         
         for (var i = 0; i < automation_amount;i++){
             if (download_automation_kill_switch){
                 download_automation_kill_switch=0;
                 current_button.innerText="Start Downloads";
-                current_button.onclick=function(){download_automation_kill_switch=0; other_button.state='disabled'; this.innerText='Stop';automate_downloads(side);};
+                current_button.onclick=function(){download_automation_kill_switch=0; other_button.disabled=true; this.innerText='Stop';automate_downloads(side);};
                 return;
             }
             if(els[i].classList.contains('hidden')){
@@ -629,7 +630,8 @@
             }
         }
         current_button.innerText="Start Downloads";
-        current_button.onclick=function(){download_automation_kill_switch=0; other_button.state='disabled';this.innerText='Stop';automate_downloads(side);};
+        other_button.disabled=false;
+        current_button.onclick=function(){download_automation_kill_switch=0; other_button.disabled=true;this.innerText='Stop';automate_downloads(side);};
 
     }
     async function automation(side){

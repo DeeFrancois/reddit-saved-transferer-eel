@@ -236,12 +236,14 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
 
 }
 .middle-column{
-    display: block;
+    display: flex;
+    flex-direction: column;
     flex-grow: 100;
     position: relative;
     float: left;
     /* width: 50%; */
     height: 100%;
+    max-height: 100%;
     color: white;
 
 }
@@ -287,6 +289,7 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
     border: 0px solid rgba(138, 137, 137, 0.8);
     background: transparent;
     white-space: normal;
+    min-height: 102px;
 }
 .post-container:not(.unstyled):hover{
     background-color: #313131;
@@ -317,6 +320,7 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
     position: relative;
     text-align: center;
     margin-top: 10px;
+    min-height: 160px;
 }
 .middle-button{
     display: inline-block;
@@ -331,7 +335,7 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
 .middle-button.automation-button{
     display: block;
     margin: auto;
-    margin-top: 10px;
+    margin-top: 5px;
     width:fit-content;
     height: 34px;
     font-size: 21px;
@@ -353,7 +357,9 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
 .video-player-container{
     display: block;
     position: relative;
-    height: 40%;
+    /* height: 40%; */
+    flex-grow: 100;
+    overflow: auto;
 
 }
 .mid-player{
@@ -397,7 +403,7 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
     width:40px;
     color:white;
     background-color:#1d1d1d;
-    margin-top:10px; 
+    margin-top:5px; 
     height:30px;
     text-align: center;
 }
@@ -511,39 +517,42 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
     </div>
     
     <div class="middle-column">
-        <div class="middle-direction">
-            
-            <h4 class="direction-label">Transfer Direction</h4>
-            <p class="transfer-direction"><img src="thumbs/right_arrow.png" id="transfer_img" class="transfer-pic" alt="Avatar" onclick="toggle_transfer_direction()"></p>
-            
-        </div>
-        <div class="middle-top-control-center">
-            
-            <div>
-                <input type="checkbox" id="videoCheck" checked onclick="toggle_video()">
-                <label for="videoCheck">Video Player</label>
-            </div>
-            <div>
-                <input type="checkbox" checked id="unsaveCheck" onclick="toggle_unsave_after_transfer()">
-                <label for="unsaveCheck">Unsave After Transfer</label>
-            </div>
-            <div>
-                <input type="checkbox" id="transferCheck" onclick="toggle_submode()" disabled>
-                <label for="transferCheck">Transfer To Subreddit</label>
-            </div>
+        <div class="middle-tophalf" style="min-height: 280px;">
 
-        </div>
-        <div class="post-container unstyled">
-
-            <div class="post-thumbnail middle">
-                <img id="middle-thumbnail" src="thumbs/left_saved.jpg" class="post-image">
+                <div class="middle-direction">
+                    
+                    <h4 class="direction-label">Transfer Direction</h4>
+                    <p class="transfer-direction"><img src="thumbs/right_arrow.png" id="transfer_img" class="transfer-pic" alt="Avatar" onclick="toggle_transfer_direction()"></p>
+                    
+                </div>
+            <div class="middle-top-control-center">
+                
+                <div>
+                    <input type="checkbox" id="videoCheck" checked onclick="toggle_video()">
+                    <label for="videoCheck">Video Player</label>
+                </div>
+                <div>
+                    <input type="checkbox" checked id="unsaveCheck" onclick="toggle_unsave_after_transfer()">
+                    <label for="unsaveCheck">Unsave After Transfer</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="transferCheck" onclick="toggle_submode()" disabled>
+                    <label for="transferCheck">Transfer To Subreddit</label>
+                </div>
+                
             </div>
-            <div class="post-details middle">
-                <p id="middle-title">Placeholder Post Title</p>
-                <p id="middle-subreddit">/r/Subreddit</p>
-                <a id="middle-hotlink" href="https://www.google.com" target="_blank" style="color: white;">Open in Browser</a>
+            <div class="post-container unstyled">
+                
+                <div class="post-thumbnail middle">
+                    <img id="middle-thumbnail" src="thumbs/left_saved.jpg" class="post-image">
+                </div>
+                <div class="post-details middle">
+                    <p id="middle-title">Placeholder Post Title</p>
+                    <p id="middle-subreddit">/r/Subreddit</p>
+                    <a id="middle-hotlink" href="https://www.google.com" target="_blank" style="color: white;">Open in Browser</a>
+                </div>
+                
             </div>
-            
         </div>
         <div class="video-player-container" id="videoplayerdiv" style="padding-top: 10px;"onwheel="mousewheelHandler(event)">
 
@@ -566,6 +575,7 @@ input[type="checkbox"] { /* change "blue" browser chrome to yellow */
             <button class="middle-button" id="submode-button" onclick="save_current()"style="display:none;">Save</button>
             <button class="middle-button automation-button" id="automation-button" onclick="automation(0)" disabled>Automate Transfers</button>
             <input class='middle-input' type="text" id="automation-input" onKeyUp="update_automation_amount(this.value)" value="10">
+            <button class="middle-button automation-button" id="open-downloads" onclick="open_downloads()">Open Downloads Folder</button>
             
         </div>
         

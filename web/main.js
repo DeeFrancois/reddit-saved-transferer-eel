@@ -574,10 +574,13 @@
     function lock_right_changes(){
         return;
     }
+    function open_downloads(){
+        eel.py_open_downloads();
+    }
     eel.expose(js_update_folder_size)
     function js_update_folder_size(folder_size){
         
-        // document.querySelector('#download-automation-button').innerText='Automate Downloads - ' + folder_size + 'MB';
+        document.querySelector('#open-downloads').innerText=folder_size + 'MB';
     
     }
     function clear_transfer_cards(){
@@ -591,7 +594,6 @@
             var els = document.querySelectorAll('#leftfeed > .post-container:not(.hidden)');
             var current_button = document.querySelector('#left-automation-button');
             var other_button = document.querySelector('#right-automation-button');
-            console.log(other_button);
         }
         else{
             var els = document.querySelectorAll('#rightfeed > .post-container:not(.hidden)');

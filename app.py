@@ -222,6 +222,9 @@ def update_folder_size():
             fp = os.path.join(path, f)
             size += os.path.getsize(fp)
     return int(size/1000000)
+@eel.expose
+def py_open_downloads():
+    os.system('start downloads')
 
 def gfycat_source(url):
     soup = BeautifulSoup(requests.get(url).content, 'html.parser')

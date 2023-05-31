@@ -48,10 +48,10 @@ def video_link(index):
     return(left_list[index].html)
 
 def extract_save_file():
-        with open('deletedsaves.txt','w',encoding='utf-8') as f:
-           # print(deleted_list)
-            for item in deleted_list:
-                f.write("%s\n" % (item))
+    with open('deletedsaves.txt','w',encoding='utf-8') as f:
+        # print(deleted_list)
+        for item in deleted_list:
+            f.write("%s\n" % (item))
 
 def get_sublist(side):
     if side == 0:
@@ -81,49 +81,57 @@ def list_filterer(the_list):
     filtered_list = []
     deleted_list = []
     comment_count = 0
-    for i in the_list:
-        # print(i)
-        current_filter = i.subreddit.display_name
-        
-        if isinstance(i,praw.models.Comment):
-            comment_count+=1
-            continue
-        #print(i.thumbnail)
-        #if text_post_flag.get()==0:
-        if i.is_self:
-            current_filter+=" textpost"
-        #if text_post_flag.get()==1:
-        #    if not i.is_self:
-        #        continue
-        #if nsfw_flag.get()== 0:
-        if i.over_18:
-            current_filter+=" nsfw"
-        else:
-            current_filter+=" safefw"
-        #if sfw_flag.get()==0:
-        #    if not i.over_18:
-        #        continue
-        
-        if i.thumbnail == 'default':
-           # print("Discovered a save that was deleted. The link is: https://www.reddit.com{}".format(i.permalink))
-            #deleted_list.append('https://www.reddit.com'+i.permalink)
-            deleted_list.append('https://www.reddit.com'+i.permalink)
-            continue
+    nsfw_count = 1
+    with open('allsaves_2.txt','w',encoding='utf-8') as f:
 
-        #if i.thumbnail == 'image' or i.thumbnail=='self':
-            #print("Posts from this sub don't have thumbnails.. idk what to do here bruh")
-        #    continue
-        
-        
+        for i in the_list:
+            # print(i)
+            f.write("%s\n" % (i.permalink))
+            current_filter = i.subreddit.display_name
+            
+            if isinstance(i,praw.models.Comment):
+                comment_count+=1
+                continue
+            #print(i.thumbnail)
+            #if text_post_flag.get()==0:
+            if i.is_self:
+                current_filter+=" textpost"
+            #if text_post_flag.get()==1:
+            #    if not i.is_self:
+            #        continue
+            #if nsfw_flag.get()== 0:
+            if i.over_18:
+                current_filter+=" nsfw"
+                nsfw_count+=1
+                # r.submission(i.id).unsave()
+                # if(nsfw_count>300):
+                    # return
+            else:
+                current_filter+=" safefw"
+            #if sfw_flag.get()==0:
+            #    if not i.over_18:
+            #        continue
+            
+            if i.thumbnail == 'default':
+            # print("Discovered a save that was deleted. The link is: https://www.reddit.com{}".format(i.permalink))
+                #deleted_list.append('https://www.reddit.com'+i.permalink)
+                deleted_list.append('https://www.reddit.com'+i.permalink)
+                continue
 
-        #if sub_flag.get()==1 and i.subreddit.display_name != entry_pull_sub.get():
-        #    continue
+            #if i.thumbnail == 'image' or i.thumbnail=='self':
+                #print("Posts from this sub don't have thumbnails.. idk what to do here bruh")
+            #    continue
+            
+            
 
-        #if 'gfycat' in i.url:
-            #print("gfycat link..")
-        #    continue
-        i.filters=current_filter
-        filtered_list.append(i)
+            #if sub_flag.get()==1 and i.subreddit.display_name != entry_pull_sub.get():
+            #    continue
+
+            #if 'gfycat' in i.url:
+                #print("gfycat link..")
+            #    continue
+            i.filters=current_filter
+            filtered_list.append(i)
     print(comment_count)
     extract_save_file()
     return filtered_list
@@ -156,7 +164,7 @@ def py_pullsaves(side):
     if side == 1: #right side
         print("Initiated saved list retrieval for: ",username_b)
         user_object_b = r2.user.me()
-        right_list=list(user_object_b.saved(limit=400))
+        right_list=list(user_object_b.saved(limit=1000))
         right_list=list_filterer(right_list)
        # print("Finished Pull")
         display_loop(1)
@@ -164,7 +172,8 @@ def py_pullsaves(side):
     else:
         print("Initiated saved list retrieval for: ",username)
         user_object = r.user.me()
-        left_list=list(user_object.saved(limit=100))
+        # left_list=list(user_object.saved(limit=2000))
+        left_list=list(r.subreddit('eipfaves').new(limit=2000))
         left_list=list_filterer(left_list)
         print("Finished Pull")
         display_loop(0)
@@ -240,7 +249,11 @@ def download_redgif():
     # api_url='https://api.redgifs.com/v1/oembed?url={}'.format(id)
     req1 = session.get(api_url,headers=header)
     # print(req1.json())
-    video_url=req1.json()['gif']['urls']['hd']
+    try:
+        video_url=req1.json()['gif']['urls']['hd']
+    except:
+        print("Error parsing json: ",req1.json())
+        return
     with session.get(video_url,stream=True) as r:
         r.raise_for_status()
         with open('downloads/{}_{}.mp4'.format(last_link[1],last_link[2]), 'wb') as f:

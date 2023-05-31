@@ -88,7 +88,7 @@
         }
         if (e.deltaY < 0 && zoom_flag==0){
             zoom_flag=1;
-            document.querySelector('body').style.backgroundColor='rgb(4 4 4)'
+            document.querySelector('body').style.backgroundColor='rgb(5 5 5)'
             document.querySelectorAll('.side-column')[0].style.left=0;
             setTimeout(function(){
                 document.querySelectorAll('.side-column')[0].style.left='-360px';
